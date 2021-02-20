@@ -15,7 +15,7 @@ class User
     public function addUser(string $email, int $status = 1)
     {
         if (!$this->checkEmail($email)) {
-            $sql = "INSERT INTO `users`(`email`,`status`) VALUES (:email,:status)";
+            $sql = "INSERT INTO `users`(`email`,`status`) VALUES (:email,:status) LIMIT 1";
             query($sql, ['email' => $email, 'status' => $status]);
         } else {
             return "this email is already in use";
@@ -50,11 +50,12 @@ class User
      */
     public function changeUserStatus(string $email, int $status = 1)
     {
-        if (!$this->checkEmail($email, [1, 2])) {
+        if (!$this->checkEmail($email, [1])) {
             $sql = "UPDATE `users` SET `status`=:status WHERE email:email";
             $respons = query($sql, ['email' => $email, 'status' => $status]);
             return true;
         }
+        
         return false;
     }
 
